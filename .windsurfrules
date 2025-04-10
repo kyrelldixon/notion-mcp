@@ -1,119 +1,39 @@
-# Windsurf Rules for MCP Development
+# Windsurf Rules for Notion-MCP Development
 
 <project_structure>
-
-- Follow this basic structure, expanding only when necessary:
+- Current structure is good, no changes needed:
 
 ```
 notion-mcp/
 ├── src/
-│   ├── env.ts                    # t3-env schema
-│   ├── config.ts                  # Application configuration
-│   ├── sdk/
-│   │   ├── notion/
-│   │   │   ├── index.ts          # Main Notion SDK client export
-│   │   │   ├── client.ts         # Notion client initialization
-│   │   │   └── types.ts          # TypeScript interfaces for Notion
-│   ├── tools/
-│   │   ├── blocks/
-│   │   │   ├── schema.ts         # Zod schemas for block operations
-│   │   │   └── handler.ts        # Handlers for block operations
-│   │   ├── pages/
-│   │   │   ├── schema.ts         # Zod schemas for page operations
-│   │   │   └── handler.ts        # Handlers for page operations
-│   │   ├── databases/
-│   │   │   ├── schema.ts         # Zod schemas for database operations
-│   │   │   └── handler.ts        # Handlers for database operations
-│   │   ├── users/
-│   │   │   ├── schema.ts         # Zod schemas for user operations
-│   │   │   └── handler.ts        # Handlers for user operations
-│   │   └── index.ts              # Export all tools
+│   ├── services/
+│   │   └── notion.ts             # Notion client service  
+│   ├── config.ts                 # Application configuration
+│   ├── env.ts                    # t3-env schema 
+│   ├── index.ts                  # Server entry point
 │   ├── utils/
-│   │   ├── markdown.ts           # Markdown conversion utilities
 │   │   └── error-handling.ts     # Error handling utilities
-│   └── server.ts                 # Main FastMCP server setup
-├── .env                          # Environment variables
-├── .env.example                  # Example environment variables
-├── package.json
+│   └── tools/
+│       ├── index.ts              # Export all tools
+│       └── databases/            # Database-related tools
+│           ├── handler.ts        # Handlers for database operations
+│           ├── index.ts          # Export database tools
+│           └── schema.ts         # Zod schemas for database operations
 ├── tsconfig.json
-└── README.md
+├── package.json  
+├── todos.md
+├── README.md
+└── bun.lock
 ```
 
 - Use kebab-case for file names (e.g., `weather-tool.ts`)
 - Only refactor folder structure when complexity justifies it
 </project_structure>
 
-<typescript_guidelines>
-
-- Prefer types over interfaces when not extending
-- Infer TypeScript types from Zod schemas when possible
-- Use `unknown` instead of `any`
-- Enable strict mode in tsconfig.json
-- Omit semicolons in code
-</typescript_guidelines>
-
-<zod_schema_guidelines>
-
-- Always use `.describe()` with detailed parameter descriptions for all schema properties
-- Use Zod schemas as the source of truth for types
-- Export type inferences from schemas for consistent typing:
-  ```typescript
-  export const UserSchema = z.object({
-    name: z.string().describe("The user's full name"),
-  })
-  export type User = z.infer<typeof UserSchema>
-  ```
-- Use Zod's transformation and refinement for validation logic
-</zod_schema_guidelines>
-
-<documentation_guidelines>
-
-- Include detailed JSDoc comments for all functions
-- Comment parameters using @param tags
-- Describe return values using @returns
-- Document potential errors using @throws
-- Keep inline comments minimal - let code and types be self-documenting
-- Include examples for complex functions
-</documentation_guidelines>
-
-<bun_guidelines>
-- Use bun for package management
-- Leverage bun's TypeScript runtime abilities
-- Use bun's bundler for creating distribution packages when needed
-- Consider using bun's test runner for unit tests
-</bun_guidelines>
-
-<code_style>
-- 2-space indentation
-- No semicolons
-- Single quotes for strings
-- Use camelCase for variables and functions
-- Use PascalCase for types and schemas
-- Keep line length under 100 characters
-- Prefer arrow functions for callbacks
-- Use async/await over Promise chains
-</code_style>
-
-<testing_guidelines>
-
-- Focus on testing custom logic and utilities
-- Don't test third-party APIs or integrations
-- Test data transformations and business logic
-- Mock external dependencies for isolation
-- Write both positive and negative test cases
-</testing_guidelines>
-
-<development_workflow>
-- Analyze task complexity before implementation
-- Follow dependency chains in task implementation
-- Update task files as implementation evolves
-- Validate dependencies periodically
-</development_workflow>
-
 <fastmcp_pattern>
 
 ```typescript
-import { FastMCP } from 'fastmcp'
+import { FastMCP, UserError } from 'fastmcp'
 import { z } from 'zod'
 
 // Define schema with descriptions
@@ -128,15 +48,20 @@ const paramSchema = z.object({
 // Infer type from schema
 type Params = z.infer<typeof paramSchema>
 
-// Handler that returns errors as strings
-const toolHandler = async (
-  params: Params
-): Promise<{ data: any } | { error: string }> => {
+// Handler that returns string responses and throws UserError for errors
+const toolHandler = async (params: Params): Promise<string> => {
   try {
     // Implementation
-    return { data: result }
-  } catch (error) {
-    return { error: `Failed to process: ${error.message}` }
+    const result = await someOperation(params)
+    
+    // Return result as a string (could be JSON.stringify if needed)
+    return `Weather for ${params.query}: ${result.temperature}°${params.units === 'metric' ? 'C' : 'F'}`
+  } catch (error: unknown) {
+    // Use UserError for client-facing errors
+    if (error instanceof Error) {
+      throw new UserError(`Failed to get weather: ${error.message}`)
+    }
+    throw new UserError('An unknown error occurred')
   }
 }
 
@@ -157,3 +82,129 @@ server.start({ transportType: 'stdio' })
 ```
 
 </fastmcp_pattern>
+
+<error_handling>
+- Use `UserError` from FastMCP for client-facing errors
+- Always catch with type `unknown` for typesafety
+- For Notion API errors, use the error handling utility:
+
+```typescript
+import { UserError } from 'fastmcp'
+import { isNotionClientError, APIErrorCode, ClientErrorCode } from '@notionhq/client'
+
+export function handleNotionError(error: unknown, context?: string): never {
+  if (isNotionClientError(error)) {
+    const contextPrefix = context ? `[${context}] ` : ''
+    
+    switch (error.code) {
+      case APIErrorCode.ObjectNotFound:
+        throw new UserError(`${contextPrefix}The requested Notion object was not found`)
+      case APIErrorCode.Unauthorized:
+        throw new UserError(`${contextPrefix}Not authorized to access this Notion resource`)
+      // Handle other error codes...
+      default:
+        throw new UserError(`${contextPrefix}Notion API error: ${error.message}`)
+    }
+  } 
+  
+  if (error instanceof Error) {
+    throw new UserError(`Error: ${error.message}`)
+  }
+  
+  throw new UserError('An unknown error occurred')
+}
+```
+
+- Return values should be strings (or types that can be converted to strings)
+- FastMCP automatically handles JSON.stringify for objects if needed
+</error_handling>
+
+<notion_api_patterns>
+- Keep Notion client initialization in `services/notion.ts`
+- Use the error handling utility for all Notion API calls
+- Follow this pattern for tool handlers:
+
+```typescript
+import { notionClient } from '@/services/notion'
+import { handleNotionError } from '@/utils/error-handling'
+
+export async function queryDatabaseHandler(args: QueryDatabaseParams): Promise<string> {
+  try {
+    const response = await notionClient.databases.query({
+      database_id: args.database_id,
+      filter: args.filter,
+      sorts: args.sorts,
+    })
+    
+    // Return a string or an object that will be stringified
+    return JSON.stringify({
+      results: response.results,
+      next_cursor: response.next_cursor,
+      has_more: response.has_more,
+    })
+  } catch (error: unknown) {
+    handleNotionError(error, `Database query (${args.database_id})`)
+  }
+}
+```
+</notion_api_patterns>
+
+<typescript_guidelines>
+- Prefer types over interfaces when not extending
+- Infer TypeScript types from Zod schemas when possible
+- Use `unknown` instead of `any`
+- Enable strict mode in tsconfig.json
+- Omit semicolons in code
+- Use path aliases with `@/` prefix in import statements:
+  ```typescript
+  // Import using path alias
+  import { notionClient } from '@/services/notion'
+  
+  // Instead of relative paths
+  import { notionClient } from '../../services/notion'
+  ```
+- Configure path aliases in tsconfig.json:
+  ```json
+  {
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"]
+      }
+    }
+  }
+  ```
+</typescript_guidelines>
+
+<zod_schema_guidelines>
+- Always use `.describe()` with detailed parameter descriptions for all schema properties
+- Use Zod schemas as the source of truth for types
+- Export type inferences from schemas for consistent typing:
+  ```typescript
+  export const UserSchema = z.object({
+    name: z.string().describe("The user's full name"),
+  })
+  export type User = z.infer<typeof UserSchema>
+  ```
+- Use Zod's transformation and refinement for validation logic
+</zod_schema_guidelines>
+
+<documentation_guidelines>
+- Include detailed JSDoc comments for all functions
+- Comment parameters using @param tags
+- Describe return values using @returns
+- Document potential errors using @throws
+- Keep inline comments minimal - let code and types be self-documenting
+- Include examples for complex functions
+</documentation_guidelines>
+
+<code_style>
+- 2-space indentation
+- No semicolons
+- Single quotes for strings
+- Use camelCase for variables and functions
+- Use PascalCase for types and schemas
+- Keep line length under 100 characters
+- Prefer arrow functions for callbacks
+- Use async/await over Promise chains
+</code_style>
