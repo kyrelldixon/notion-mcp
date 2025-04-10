@@ -1,41 +1,21 @@
-import { FastMCP } from 'fastmcp'
-import { loadEnv } from './utils/env'
+import { FastMCP } from 'fastmcp';
+import { config } from './config';
 
-/**
- * Main entry point for the Notion MCP server
- * This file initializes the FastMCP server and registers all tools
- */
-
-/**
- * Main function to initialize and start the MCP server
- */
-function main() {
-  // Load environment variables
-  const envResult = loadEnv()
-  
-  // Handle environment loading errors
-  if (!envResult.success) {
-    console.error('Failed to start server:')
-    console.error(envResult.error)
-    process.exit(1)
-    return
-  }
-
-  // Initialize the FastMCP server
+async function main() {
+  // Create server instance
   const server = new FastMCP({
-    name: 'Notion MCP',
-    version: '1.0.0',
-  })
+    name: config.server.name,
+    version: config.server.version,
+  });
 
-  // Register tools here
-  // Example: server.addTool({ ... })
-
-  // Start the server with stdio transport
-  server.start({ transportType: 'stdio' })
-  
-  // Log successful startup
-  console.log(`Notion MCP server started with log level: ${envResult.data.LOG_LEVEL}`)
+  // Start the server
+  await server.start({
+    transportType: "stdio"
+  });
 }
 
-// Execute the main function
-main()
+// Start the server
+main().catch((error) => {
+  console.error("Fatal error in main():", error);
+  process.exit(1);
+});
