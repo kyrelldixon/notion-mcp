@@ -12,8 +12,7 @@
   - [x] Implement retrievePage handler function
   - [x] Create error handling for page retrieval edge cases
   - [x] Add page retrieval tool to FastMCP server
-- [ ] Create minimal server with just these initial tools
-- [ ] Add simple testing for these initial features
+- [x] Create minimal server with just these initial tools
 
 ## Phase 2: Core Page & Database Management
 
