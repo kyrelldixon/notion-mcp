@@ -1,0 +1,157 @@
+# Windsurf Rules for MCP Development
+
+<project_structure>
+
+- Follow this basic structure, expanding only when necessary:
+
+```
+project-root/
+├── src/
+│   ├── services/        # External service integrations
+│   ├── tools/           # MCP tool definitions
+│   └── index.ts         # Main entry point
+├── tsconfig.json
+└── package.json
+```
+
+- Use kebab-case for file names (e.g., `weather-tool.ts`)
+- Only refactor folder structure when complexity justifies it
+  </project_structure>
+
+<typescript_guidelines>
+
+- Prefer types over interfaces when not extending
+- Infer TypeScript types from Zod schemas when possible
+- Use `unknown` instead of `any`
+- Enable strict mode in tsconfig.json
+- Omit semicolons in code
+  </typescript_guidelines>
+
+<mcp_guidelines>
+
+- Define each MCP tool in a separate file in the tools/ directory
+- Return errors as strings rather than throwing exceptions
+- Always implement proper error handling with descriptive messages
+- Focus on a single responsibility per tool
+- Use descriptive variable names that reflect their purpose
+  </mcp_guidelines>
+
+<zod_schema_guidelines>
+
+- Always use `.describe()` with detailed parameter descriptions for all schema properties
+- Use Zod schemas as the source of truth for types
+- Export type inferences from schemas for consistent typing:
+  ```typescript
+  export const UserSchema = z.object({
+    name: z.string().describe("The user's full name"),
+  })
+  export type User = z.infer<typeof UserSchema>
+  ```
+- Use Zod's transformation and refinement for validation logic
+  </zod_schema_guidelines>
+
+<documentation_guidelines>
+
+- Include detailed JSDoc comments for all functions
+- Comment parameters using @param tags
+- Describe return values using @returns
+- Document potential errors using @throws
+- Keep inline comments minimal - let code and types be self-documenting
+- Include examples for complex functions
+  </documentation_guidelines>
+
+<bun_guidelines>
+
+- Use bun for package management
+- Leverage bun's TypeScript runtime abilities
+- Use bun's bundler for creating distribution packages when needed
+- Consider using bun's test runner for unit tests
+  </bun_guidelines>
+
+<code_style>
+
+- 2-space indentation
+- No semicolons
+- Single quotes for strings
+- Use camelCase for variables and functions
+- Use PascalCase for types and schemas
+- Keep line length under 100 characters
+- Prefer arrow functions for callbacks
+- Use async/await over Promise chains
+  </code_style>
+
+<error_handling>
+
+- Never throw errors in MCP tools - return error strings instead
+- Provide contextual error messages
+- Include detailed error information for debugging
+- Handle errors at appropriate levels of abstraction
+- Implement proper error logging
+  </error_handling>
+
+<testing_guidelines>
+
+- Focus on testing custom logic and utilities
+- Don't test third-party APIs or integrations
+- Test data transformations and business logic
+- Mock external dependencies for isolation
+- Write both positive and negative test cases
+  </testing_guidelines>
+
+<development_workflow>
+
+- Start with generating detailed tasks from PRD
+- Analyze task complexity before implementation
+- Follow dependency chains in task implementation
+- Break down complex tasks into manageable subtasks
+- Update task files as implementation evolves
+- Validate dependencies periodically
+  </development_workflow>
+
+<fastmcp_pattern>
+
+```typescript
+import { FastMCP } from 'fastmcp'
+import { z } from 'zod'
+
+// Define schema with descriptions
+const paramSchema = z.object({
+  query: z.string().describe('Search query for weather information'),
+  units: z
+    .enum(['metric', 'imperial'])
+    .default('metric')
+    .describe('Unit system to use for temperature and measurements'),
+})
+
+// Infer type from schema
+type Params = z.infer<typeof paramSchema>
+
+// Handler that returns errors as strings
+const toolHandler = async (
+  params: Params
+): Promise<{ data: any } | { error: string }> => {
+  try {
+    // Implementation
+    return { data: result }
+  } catch (error) {
+    return { error: `Failed to process: ${error.message}` }
+  }
+}
+
+// Add to server
+const server = new FastMCP({
+  name: 'Weather Service',
+  version: '1.0.0',
+})
+
+server.addTool({
+  name: 'getWeather',
+  description: 'Retrieve current weather information for a location',
+  parameters: paramSchema,
+  execute: toolHandler,
+})
+
+server.start({ transportType: 'stdio' })
+```
+
+</fastmcp_pattern>
