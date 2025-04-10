@@ -101,337 +101,489 @@
 **Dependencies:** 1.4.1  
 **Completion Criteria:** All requests and responses properly logged with context
 
-## 2. Basic Notion Operations
-**Description:** Implement core functionality for interacting with Notion databases, pages, and blocks  
+## 2. Basic Notion Services
+**Description:** Implement core service layer for interacting with Notion databases, pages, and blocks  
 **Dependencies:** 1  
-**Complexity:** High  
+**Complexity:** Medium  
 **Priority:** 1
 
-### 2.1. Database Query Tools
-**Description:** Implement tools for querying and retrieving databases  
+### 2.1. Database Services
+**Description:** Create services for database operations  
 **Dependencies:** 1  
-**Completion Criteria:** Able to successfully query and retrieve database information
+**Completion Criteria:** Service layer functions to interact with Notion databases
 
-#### 2.1.1. Implement notion_query_database Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation with Zod
-- [ ] Add pagination support
-- [ ] Implement filter and sort logic
+#### 2.1.1. Implement Database Query Service
+- [ ] Create service function for querying databases
+- [ ] Handle filter and sort parameters
+- [ ] Implement pagination logic
+- [ ] Add error handling and validation
 
-**Dependencies:** 1.5  
-**Completion Criteria:** Successfully returns filtered database records
-
-#### 2.1.2. Implement notion_retrieve_database Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
-- [ ] Handle database metadata retrieval
-
-**Dependencies:** 1.5  
-**Completion Criteria:** Successfully returns database details
-
-### 2.2. Page Operations Tools
-**Description:** Implement tools for page creation and retrieval  
 **Dependencies:** 1  
-**Completion Criteria:** Able to create and retrieve pages from Notion
+**Completion Criteria:** Service successfully retrieves filtered database results
 
-#### 2.2.1. Implement notion_create_page Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 2.1.2. Implement Database Retrieval Service
+- [ ] Create service function for retrieving database metadata
+- [ ] Handle response formatting
+- [ ] Add error handling
+
+**Dependencies:** 1  
+**Completion Criteria:** Service successfully returns database details
+
+### 2.2. Page Services
+**Description:** Create services for page operations  
+**Dependencies:** 1  
+**Completion Criteria:** Service layer functions to interact with Notion pages
+
+#### 2.2.1. Implement Page Creation Service
+- [ ] Create service function for creating pages
 - [ ] Support both standalone and database pages
-- [ ] Handle property setting during creation
+- [ ] Handle property formatting
+- [ ] Add validation and error handling
 
-**Dependencies:** 1.5  
-**Completion Criteria:** Successfully creates new pages in Notion
-
-#### 2.2.2. Implement notion_retrieve_page Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
-- [ ] Add options for content format
-
-**Dependencies:** 1.5  
-**Completion Criteria:** Successfully retrieves page content and properties
-
-### 2.3. Block Operations Tools
-**Description:** Implement tools for retrieving blocks and their children  
 **Dependencies:** 1  
-**Completion Criteria:** Able to retrieve block details and children
+**Completion Criteria:** Service successfully creates pages
 
-#### 2.3.1. Implement notion_retrieve_block Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 2.2.2. Implement Page Retrieval Service
+- [ ] Create service function for retrieving pages
+- [ ] Handle content formatting options
+- [ ] Add error handling
+
+**Dependencies:** 1  
+**Completion Criteria:** Service successfully retrieves page content
+
+### 2.3. Block Services
+**Description:** Create services for block operations  
+**Dependencies:** 1  
+**Completion Criteria:** Service layer functions to interact with Notion blocks
+
+#### 2.3.1. Implement Block Retrieval Service
+- [ ] Create service function for retrieving blocks
 - [ ] Handle different block types
+- [ ] Add error handling
 
-**Dependencies:** 1.5  
-**Completion Criteria:** Successfully retrieves block information
+**Dependencies:** 1  
+**Completion Criteria:** Service successfully retrieves block information
 
-#### 2.3.2. Implement notion_retrieve_block_children Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
-- [ ] Add pagination support
+#### 2.3.2. Implement Block Children Retrieval Service
+- [ ] Create service function for retrieving block children
+- [ ] Implement pagination support
 - [ ] Handle nested block structures
+- [ ] Add error handling
 
 **Dependencies:** 2.3.1  
-**Completion Criteria:** Successfully retrieves block children with pagination
+**Completion Criteria:** Service successfully retrieves block children
 
-### 2.4. Search Implementation
-**Description:** Implement search functionality across Notion workspace  
+### 2.4. Search Service
+**Description:** Create service for search operations  
 **Dependencies:** 1  
-**Completion Criteria:** Able to search pages and databases with filtering
+**Completion Criteria:** Service layer function to search Notion workspace
 
-#### 2.4.1. Implement notion_search Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 2.4.1. Implement Search Service
+- [ ] Create service function for searching
 - [ ] Support various search filters
-- [ ] Add pagination support
+- [ ] Implement pagination
+- [ ] Add error handling
 
-**Dependencies:** 1.5  
-**Completion Criteria:** Successfully searches across workspace content
+**Dependencies:** 1  
+**Completion Criteria:** Service successfully searches across workspace
 
-## 3. Advanced Notion Features
-**Description:** Implement advanced operations for databases, pages, and blocks including creation, updates, and deletions  
+## 3. MCP Tool Implementation
+
+**Description:** Create MCP tools that leverage the service layer to expose functionality to AI models  
+**Dependencies:** 2  
+**Complexity:** Medium  
+**Priority:** 1
+
+### 3.1. Database Query Tools
+**Description:** Implement MCP tools for database operations  
+**Dependencies:** 2.1  
+**Completion Criteria:** Working MCP tools for database interactions
+
+#### 3.1.1. Implement notion_query_database Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation with Zod
+- [ ] Connect to database query service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.1.1  
+**Completion Criteria:** Tool successfully returns filtered database records
+
+#### 3.1.2. Implement notion_retrieve_database Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to database retrieval service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.1.2  
+**Completion Criteria:** Tool successfully returns database details
+
+### 3.2. Page Operation Tools
+**Description:** Implement MCP tools for page operations  
+**Dependencies:** 2.2  
+**Completion Criteria:** Working MCP tools for page interactions
+
+#### 3.2.1. Implement notion_create_page Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to page creation service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.2.1  
+**Completion Criteria:** Tool successfully creates new pages
+
+#### 3.2.2. Implement notion_retrieve_page Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to page retrieval service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.2.2  
+**Completion Criteria:** Tool successfully retrieves page content
+
+### 3.3. Block Operation Tools
+**Description:** Implement MCP tools for block operations  
+**Dependencies:** 2.3  
+**Completion Criteria:** Working MCP tools for block interactions
+
+#### 3.3.1. Implement notion_retrieve_block Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to block retrieval service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.3.1  
+**Completion Criteria:** Tool successfully retrieves block information
+
+#### 3.3.2. Implement notion_retrieve_block_children Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to block children retrieval service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.3.2  
+**Completion Criteria:** Tool successfully retrieves block children
+
+### 3.4. Search Implementation
+**Description:** Implement MCP tool for search functionality  
+**Dependencies:** 2.4  
+**Completion Criteria:** Working MCP tool for search operations
+
+#### 3.4.1. Implement notion_search Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to search service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 2.4.1  
+**Completion Criteria:** Tool successfully searches across workspace content
+
+## 4. Advanced Notion Services
+**Description:** Implement advanced service layer for creating and updating databases, pages, and blocks  
 **Dependencies:** 2  
 **Complexity:** High  
 **Priority:** 2
 
-### 3.1. Advanced Database Operations
-**Description:** Implement tools for creating and updating databases  
+### 4.1. Advanced Database Services
+**Description:** Create services for advanced database operations  
 **Dependencies:** 2.1  
-**Completion Criteria:** Able to create and modify database schemas
+**Completion Criteria:** Services for creating and updating databases
 
-#### 3.1.1. Implement notion_create_database Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
-- [ ] Support all property types
-- [ ] Handle parent page specification
+#### 4.1.1. Implement Database Creation Service
+- [ ] Create service function for creating databases
+- [ ] Support property type configuration
+- [ ] Handle parent specification
+- [ ] Add validation and error handling
 
 **Dependencies:** 2.1  
-**Completion Criteria:** Successfully creates databases with proper schemas
+**Completion Criteria:** Service successfully creates databases
 
-#### 3.1.2. Implement notion_update_database Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 4.1.2. Implement Database Update Service
+- [ ] Create service function for updating databases
 - [ ] Support title and schema modifications
+- [ ] Add validation and error handling
 
 **Dependencies:** 2.1  
-**Completion Criteria:** Successfully updates existing database properties
+**Completion Criteria:** Service successfully updates databases
 
-### 3.2. Advanced Page Operations
-**Description:** Implement tools for updating page properties and content  
+### 4.2. Advanced Page Services
+**Description:** Create services for advanced page operations  
 **Dependencies:** 2.2  
-**Completion Criteria:** Able to modify page attributes and content
+**Completion Criteria:** Services for updating page properties and content
 
-#### 3.2.1. Implement notion_update_page Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 4.2.1. Implement Page Update Service
+- [ ] Create service function for updating pages
 - [ ] Support property updates
 - [ ] Handle icon and cover changes
 - [ ] Support archiving functionality
+- [ ] Add validation and error handling
 
 **Dependencies:** 2.2  
-**Completion Criteria:** Successfully updates page attributes
+**Completion Criteria:** Service successfully updates pages
 
-### 3.3. Advanced Block Operations
-**Description:** Implement tools for manipulating block content  
+### 4.3. Advanced Block Services
+**Description:** Create services for advanced block operations  
 **Dependencies:** 2.3  
-**Completion Criteria:** Able to append, update, and delete blocks
+**Completion Criteria:** Services for appending, updating, and deleting blocks
 
-#### 3.3.1. Implement notion_append_block_children Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 4.3.1. Implement Block Append Service
+- [ ] Create service function for appending blocks
 - [ ] Support all block types
-- [ ] Handle nested block structures
+- [ ] Handle nested structures
+- [ ] Add validation and error handling
 
 **Dependencies:** 2.3  
-**Completion Criteria:** Successfully appends new blocks to existing content
+**Completion Criteria:** Service successfully appends blocks
 
-#### 3.3.2. Implement notion_update_block Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
+#### 4.3.2. Implement Block Update Service
+- [ ] Create service function for updating blocks
 - [ ] Support different block type updates
+- [ ] Add validation and error handling
 
 **Dependencies:** 2.3  
-**Completion Criteria:** Successfully updates block content
+**Completion Criteria:** Service successfully updates blocks
 
-#### 3.3.3. Implement notion_delete_block Tool
-- [ ] Create tool function structure
-- [ ] Implement parameter validation
-- [ ] Handle recursive deletion if needed
+#### 4.3.3. Implement Block Delete Service
+- [ ] Create service function for deleting blocks
+- [ ] Handle recursive deletion logic
+- [ ] Add validation and error handling
 
 **Dependencies:** 2.3  
-**Completion Criteria:** Successfully removes blocks from content
+**Completion Criteria:** Service successfully deletes blocks
 
-### 3.4. User Management Tools
-**Description:** Implement tools for user information  
-**Dependencies:** 2  
-**Completion Criteria:** Able to list users and retrieve bot information
+## 5. Advanced MCP Tool Implementation
+**Description:** Create MCP tools for advanced Notion operations  
+**Dependencies:** 4  
+**Complexity:** High  
+**Priority:** 2
 
-#### 3.4.1. Implement notion_list_users Tool
-- [ ] Create tool function structure
+### 5.1. Advanced Database Tools
+**Description:** Implement advanced MCP tools for database operations  
+**Dependencies:** 4.1  
+**Completion Criteria:** Working MCP tools for creating and updating databases
+
+#### 5.1.1. Implement notion_create_database Tool
+- [ ] Create tool definition
 - [ ] Implement parameter validation
-- [ ] Add pagination support
+- [ ] Connect to database creation service
+- [ ] Format response for MCP protocol
 
-**Dependencies:** 2  
-**Completion Criteria:** Successfully lists workspace users
+**Dependencies:** 4.1.1  
+**Completion Criteria:** Tool successfully creates databases
 
-#### 3.4.2. Implement notion_retrieve_bot Tool
-- [ ] Create tool function structure
+#### 5.1.2. Implement notion_update_database Tool
+- [ ] Create tool definition
 - [ ] Implement parameter validation
-- [ ] Retrieve API token bot information
+- [ ] Connect to database update service
+- [ ] Format response for MCP protocol
 
-**Dependencies:** 2  
-**Completion Criteria:** Successfully returns bot information
+**Dependencies:** 4.1.2  
+**Completion Criteria:** Tool successfully updates databases
 
-## 4. Testing & Documentation
+### 5.2. Advanced Page Tools
+**Description:** Implement advanced MCP tools for page operations  
+**Dependencies:** 4.2  
+**Completion Criteria:** Working MCP tools for updating pages
+
+#### 5.2.1. Implement notion_update_page Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to page update service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 4.2.1  
+**Completion Criteria:** Tool successfully updates pages
+
+### 5.3. Advanced Block Tools
+**Description:** Implement advanced MCP tools for block operations  
+**Dependencies:** 4.3  
+**Completion Criteria:** Working MCP tools for manipulating blocks
+
+#### 5.3.1. Implement notion_append_block_children Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to block append service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 4.3.1  
+**Completion Criteria:** Tool successfully appends blocks
+
+#### 5.3.2. Implement notion_update_block Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to block update service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 4.3.2  
+**Completion Criteria:** Tool successfully updates blocks
+
+#### 5.3.3. Implement notion_delete_block Tool
+- [ ] Create tool definition
+- [ ] Implement parameter validation
+- [ ] Connect to block delete service
+- [ ] Format response for MCP protocol
+
+**Dependencies:** 4.3.3  
+**Completion Criteria:** Tool successfully deletes blocks
+
+## 6. Testing & Documentation
 **Description:** Ensure code quality, create documentation, and prepare examples  
-**Dependencies:** 3  
+**Dependencies:** 3, 5  
 **Complexity:** Medium  
 **Priority:** 2
 
-### 4.1. Unit Testing
-**Description:** Create comprehensive test suite for utility functions  
-**Dependencies:** 3  
+### 6.1. Unit Testing
+**Description:** Create comprehensive test suite for utility functions and services  
+**Dependencies:** 3, 5  
 **Completion Criteria:** Core functions covered by unit tests
 
-#### 4.1.1. Set Up Testing Framework
+#### 6.1.1. Set Up Testing Framework
 - [ ] Configure Bun test environment
 - [ ] Set up test directory structure
 - [ ] Create test utilities
 
-**Dependencies:** 3  
+**Dependencies:** 3, 5  
 **Completion Criteria:** Testing infrastructure ready
 
-#### 4.1.2. Write Utility Function Tests
+#### 6.1.2. Write Service Tests
 - [ ] Test authentication functions
 - [ ] Test error handling
-- [ ] Test rate limiting
+- [ ] Test service layer functions
 
-**Dependencies:** 4.1.1  
-**Completion Criteria:** Utility functions have good test coverage
+**Dependencies:** 6.1.1  
+**Completion Criteria:** Service functions have good test coverage
 
-### 4.2. Integration Testing
+#### 6.1.3. Write Tool Tests
+- [ ] Test parameter validation
+- [ ] Test tool execution
+- [ ] Test response formatting
+
+**Dependencies:** 6.1.2  
+**Completion Criteria:** Tool functions have good test coverage
+
+### 6.2. Integration Testing
 **Description:** Test Notion API integration  
-**Dependencies:** 3, 4.1  
+**Dependencies:** 3, 5, 6.1  
 **Completion Criteria:** All tools correctly interact with Notion API
 
-#### 4.2.1. Create Test Workspace
+#### 6.2.1. Create Test Workspace
 - [ ] Set up dedicated test Notion workspace
 - [ ] Create test data
 
-**Dependencies:** 3  
+**Dependencies:** 3, 5  
 **Completion Criteria:** Test environment ready
 
-#### 4.2.2. Write Tool Integration Tests
+#### 6.2.2. Write Integration Tests
 - [ ] Test database tools
 - [ ] Test page tools
 - [ ] Test block tools
 - [ ] Test search functionality
 
-**Dependencies:** 4.2.1  
+**Dependencies:** 6.2.1  
 **Completion Criteria:** All tools pass integration tests
 
-### 4.3. API Documentation
+### 6.3. API Documentation
 **Description:** Document all tools and parameters  
-**Dependencies:** 3  
+**Dependencies:** 3, 5  
 **Completion Criteria:** Complete API reference available
 
-#### 4.3.1. Create Tool Documentation
+#### 6.3.1. Create Tool Documentation
 - [ ] Document parameters and return values
 - [ ] Add examples for each tool
 - [ ] Document error responses
 
-**Dependencies:** 3  
+**Dependencies:** 3, 5  
 **Completion Criteria:** Each tool has comprehensive documentation
 
-#### 4.3.2. Generate API Reference
+#### 6.3.2. Generate API Reference
 - [ ] Set up documentation generation system
 - [ ] Create readable API reference
 
-**Dependencies:** 4.3.1  
+**Dependencies:** 6.3.1  
 **Completion Criteria:** Generated API documentation available
 
-### 4.4. Usage Examples
+### 6.4. Usage Examples
 **Description:** Create examples for common scenarios  
-**Dependencies:** 3, 4.3  
+**Dependencies:** 3, 5, 6.3  
 **Completion Criteria:** Examples cover key use cases
 
-#### 4.4.1. Basic Usage Examples
+#### 6.4.1. Basic Usage Examples
 - [ ] Database query examples
 - [ ] Page creation examples
 - [ ] Block manipulation examples
 
-**Dependencies:** 3  
+**Dependencies:** 3, 5  
 **Completion Criteria:** Basic examples documented
 
-#### 4.4.2. Advanced Scenario Examples
+#### 6.4.2. Advanced Scenario Examples
 - [ ] Complex database creation
 - [ ] Nested block structures
 - [ ] Complete workspace management
 
-**Dependencies:** 4.4.1  
+**Dependencies:** 6.4.1  
 **Completion Criteria:** Advanced examples documented
 
-## 5. Educational Content
+## 7. Educational Content
 **Description:** Create materials to help users understand and extend the project  
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Complexity:** Low  
 **Priority:** 3
 
-### 5.1. Usage Guides
+### 7.1. Usage Guides
 **Description:** Create comprehensive guides for using the MCP server  
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Clear guides for different use cases
 
-#### 5.1.1. Getting Started Guide
-- [ ] Create initial setup instructions
+#### 7.1.1. Getting Started Guide
+- [ ]Create initial setup instructions
 - [ ] Add configuration options
 - [ ] Provide basic usage examples
 
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** New users can get started quickly
 
-#### 5.1.2. Advanced Usage Guide
-- [ ] Document complex scenarios
+#### 7.1.2. Advanced Usage Guide
+- [ ]Document complex scenarios
 - [ ] Provide performance optimization tips
 - [ ] Add troubleshooting section
 
-**Dependencies:** 5.1.1  
+**Dependencies:** 7.1.1  
 **Completion Criteria:** Users can implement advanced use cases
 
-### 5.2. Business Case Examples
+### 7.2. Business Case Examples
 **Description:** Demonstrate real-world applications  
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Examples show practical business value
 
-#### 5.2.1. Knowledge Management Example
-- [ ] Create example for AI managing documentation
+#### 7.2.1. Knowledge Management Example
+- [ ]Create example for AI managing documentation
 - [ ] Show database and page interactions
 
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Complete knowledge management example
 
-#### 5.2.2. Project Management Example
-- [ ] Create example for AI tracking projects
+#### 7.2.2. Project Management Example
+- [ ]Create example for AI tracking projects
 - [ ] Show database filtering and updates
 
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Complete project management example
 
-### 5.3. Extension Documentation
+### 7.3. Extension Documentation
 **Description:** Document how to extend the system  
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Developers can add custom functionality
 
-#### 5.3.1. Custom Tools Guide
-- [ ] Document tool creation process
+#### 7.3.1. Custom Tools Guide
+- [ ]Document tool creation process
 - [ ] Provide template for new tools
 - [ ] Show validation best practices
 
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Developers can add custom tools
 
-#### 5.3.2. Integration Guide
-- [ ] Document integration with AI systems
+#### 7.3.2. Integration Guide
+- [ ]Document integration with AI systems
 - [ ] Show example AI interactions
 
-**Dependencies:** 4  
+**Dependencies:** 6  
 **Completion Criteria:** Clear path for AI integration
