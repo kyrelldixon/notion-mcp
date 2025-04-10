@@ -7,7 +7,11 @@
 - [x] Set up basic environment config with t3-env
 - [x] Create initial Notion client implementation
 - [x] Implement database query functionality (simple version)
-- [ ] Implement page retrieval functionality
+- [x] Implement page retrieval functionality
+  - [x] Create Zod schema for page retrieval parameters
+  - [x] Implement retrievePage handler function
+  - [x] Create error handling for page retrieval edge cases
+  - [x] Add page retrieval tool to FastMCP server
 - [ ] Create minimal server with just these initial tools
 - [ ] Add simple testing for these initial features
 

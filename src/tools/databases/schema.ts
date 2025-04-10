@@ -103,9 +103,6 @@ const propertyFilterSchema = z.object({
   ])
 );
 
-// Properly define filter schema using z.ZodType to avoid circular references
-type FilterType = z.ZodObject<any> | z.ZodUnion<[z.ZodObject<any>, ...z.ZodObject<any>[]]>;
-
 // Use a type assertion for the recursive structures
 const filterSchema: z.ZodType<any> = z.lazy(() =>
   z.union([

@@ -1,6 +1,7 @@
 import { FastMCP } from 'fastmcp';
 import { config } from './config';
 import { queryDatabaseSchema, queryDatabaseHandler } from './tools/databases';
+import { retrievePageSchema, retrievePageHandler } from './tools/pages';
 
 async function main() {
   // Create server instance
@@ -15,6 +16,14 @@ async function main() {
     description: queryDatabaseSchema.description,
     parameters: queryDatabaseSchema.parameters,
     execute: queryDatabaseHandler,
+  });
+
+  // Register page tools
+  server.addTool({
+    name: retrievePageSchema.name,
+    description: retrievePageSchema.description,
+    parameters: retrievePageSchema.parameters,
+    execute: retrievePageHandler,
   });
 
   // Start the server
