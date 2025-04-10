@@ -31,7 +31,6 @@
   - [x] Implement property setting for new pages
   - [x] Add error handling for page creation edge cases
   - [x] Add page creation tool to FastMCP server
-  - [ ] Write tests for page creation functionality
 - [ ] Add page property update functionality
   - [ ] Create Zod schema for page property update parameters
   - [ ] Implement updatePageProperties handler function
