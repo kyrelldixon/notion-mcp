@@ -6,7 +6,7 @@
 - [x] Install core dependencies: `@notionhq/client`, `fastmcp`, `zod`, `@t3-oss/env-core`
 - [x] Set up basic environment config with t3-env
 - [x] Create initial Notion client implementation
-- [ ] Implement database query functionality (simple version)
+- [x] Implement database query functionality (simple version)
 - [ ] Implement page retrieval functionality
 - [ ] Create minimal server with just these initial tools
 - [ ] Add simple testing for these initial features
@@ -15,7 +15,7 @@
 
 - [ ] Implement database creation functionality
 - [ ] Implement page creation functionality
-- [ ] Create improved error handling utilities
+- [x] Create improved error handling utilities
 - [ ] Add database update functionality
 - [ ] Add page property update functionality
 - [ ] Add test cases for each new feature
@@ -41,7 +41,7 @@
 
 ## Phase 5: Polish & Deployment
 
-- [ ] Refine error handling and logging
+- [x] Refine error handling and logging
 - [ ] Document all available tools
 - [ ] Create setup instructions in README
 - [ ] Configure for Claude Desktop/MCP Client usage
