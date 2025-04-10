@@ -101,27 +101,6 @@
 **Dependencies:** 1.4.1  
 **Completion Criteria:** All requests and responses properly logged with context
 
-### 1.5. Rate Limiting Infrastructure
-**Description:** Implement intelligent throttling for Notion API  
-**Dependencies:** 1.2  
-**Completion Criteria:** Server respects API rate limits without unnecessary delays
-
-#### 1.5.1. Create Request Queue System
-- [ ] Implement queue for API requests
-- [ ] Add prioritization logic
-- [ ] Implement concurrency control
-
-**Dependencies:** 1.2  
-**Completion Criteria:** Requests properly queued and prioritized
-
-#### 1.5.2. Implement Backoff Strategy
-- [ ] Create exponential backoff for rate limits
-- [ ] Add retry logic for failed requests
-- [ ] Implement timeout handling
-
-**Dependencies:** 1.5.1  
-**Completion Criteria:** System automatically retries with appropriate backoff
-
 ## 2. Basic Notion Operations
 **Description:** Implement core functionality for interacting with Notion databases, pages, and blocks  
 **Dependencies:** 1  
