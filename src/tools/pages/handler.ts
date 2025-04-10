@@ -64,12 +64,12 @@ export async function retrievePageHandler(args: RetrievePageParams) {
  */
 export async function createPageHandler(args: CreatePageParams) {
   try {
-    const { parent, properties, content } = args
+    const { parent, properties, children } = args
     
     // Build the create page parameters
     const createParams: CreatePageParameters = {
       parent: {} as any, // Will be properly set below
-      properties: {} // Initialize with empty properties, will be set properly below
+      properties: properties // Properties are required for both database and page parents
     }
     
     // Set the parent based on the type
@@ -82,33 +82,20 @@ export async function createPageHandler(args: CreatePageParams) {
       if (!properties || Object.keys(properties).length === 0) {
         throw new Error('Properties are required when creating a page in a database')
       }
-      
-      createParams.properties = properties
     } else if ('page_id' in parent) {
       createParams.parent = {
         page_id: parent.page_id
       }
       
-      // Properties are optional for pages created as subpages
-      if (properties) {
-        createParams.properties = properties
-      }
-    } else if ('workspace' in parent && parent.workspace) {
-      // The Notion API expects { workspace: true } but TypeScript doesn't know about this
-      // Using type assertion to handle this case
-      createParams.parent = {
-        workspace: true
-      } as any
-      
-      // Properties are optional for pages created in workspace
-      if (properties) {
-        createParams.properties = properties
+      // For page parents, only title is valid in properties
+      if (!properties || !('title' in properties)) {
+        throw new Error('Title property is required when creating a page as a subpage')
       }
     }
     
-    // Add content blocks if provided
-    if (content && content.length > 0) {
-      createParams.children = content.map(block => {
+    // Add children blocks if provided
+    if (children && children.length > 0) {
+      createParams.children = children.map((block: { type: string; content: string }) => {
         // Map the simplified content model to Notion's block structure
         switch (block.type) {
           case 'paragraph':
