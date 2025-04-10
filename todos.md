@@ -1,7 +1,6 @@
 # Notion MCP Server - Agile Implementation Plan
 
-## Phase 1: Project Setup & Initial Database/Page Features
-
+## Phase 1: Core Discovery and Reading (Completed)
 - [x] Initialize new Bun project for FastMCP Notion tools
 - [x] Install core dependencies: `@notionhq/client`, `fastmcp`, `zod`, `@t3-oss/env-core`
 - [x] Set up basic environment config with t3-env
@@ -13,38 +12,37 @@
   - [x] Create error handling for page retrieval edge cases
   - [x] Add page retrieval tool to FastMCP server
 - [x] Create minimal server with just these initial tools
+- [x] Refine error handling and logging
 
-## Phase 2: Core Page & Database Management
+## Phase 2: Search and Discovery (High Priority)
+- [ ] Implement search functionality
+  - [ ] Create Zod schema for search parameters
+  - [ ] Implement search handler function
+  - [ ] Add database and page type filtering
+  - [ ] Add pagination support for search results
 
+## Phase 3: Content Creation and Modification
 - [x] Implement database creation functionality
 - [ ] Implement page creation functionality
-- [x] Create improved error handling utilities
-- [ ] Add database update functionality
 - [ ] Add page property update functionality
-- [ ] Add test cases for each new feature
-- [ ] Refine server implementation
+- [ ] Add database update functionality
+- [ ] Create test cases for each feature
 
-## Phase 3: Block Operations
-
+## Phase 4: Block Operations
 - [ ] Implement retrieveBlock functionality
 - [ ] Implement retrieveBlockChildren functionality
 - [ ] Implement appendBlockChildren functionality
 - [ ] Implement updateBlock functionality
 - [ ] Implement deleteBlock functionality
-- [ ] Add tests for block operations
 
-## Phase 4: Advanced Features
-
-- [ ] Implement search functionality
+## Phase 5: Advanced Features
 - [ ] Add user operations (listing, retrieval)
 - [ ] Add comment operations
 - [ ] Implement markdown conversion utility
 - [ ] Add pagination helper for list operations
 - [ ] Create comprehensive test suite
 
-## Phase 5: Polish & Deployment
-
-- [x] Refine error handling and logging
+## Phase 6: Polish & Deployment
 - [ ] Document all available tools
 - [ ] Create setup instructions in README
 - [ ] Configure for Claude Desktop/MCP Client usage
