@@ -1,9 +1,9 @@
 // src/tools/databases/handler.ts
 import { z } from "zod";
-import type { QueryDatabaseParameters } from "@notionhq/client/build/src/api-endpoints";
+import type { QueryDatabaseParameters, CreateDatabaseParameters } from "@notionhq/client/build/src/api-endpoints";
 import { notionClient } from "@/services/notion";
 import { handleNotionError } from "@/utils/error-handling";
-import { queryDatabaseSchema } from "./schema";
+import { queryDatabaseSchema, createDatabaseSchema } from "./schema";
 
 export async function queryDatabaseHandler(
   args: z.infer<typeof queryDatabaseSchema.parameters>
@@ -33,5 +33,60 @@ export async function queryDatabaseHandler(
     }, null, 2);
   } catch (error: unknown) {
     handleNotionError(error, `Database query (${args.database_id})`);
+  }
+}
+
+/**
+ * Creates a new database as a child of a specified parent page
+ * 
+ * @param args - Parameters for database creation
+ * @returns JSON string with the created database information
+ */
+export async function createDatabaseHandler(
+  args: z.infer<typeof createDatabaseSchema.parameters>
+) {
+  try {
+    const { parent_page_id, title, properties, icon, cover } = args;
+
+    // Build the create database parameters
+    const createParams: CreateDatabaseParameters = {
+      parent: {
+        type: "page_id",
+        page_id: parent_page_id
+      },
+      title: [
+        {
+          type: "text",
+          text: {
+            content: title
+          }
+        }
+      ],
+      properties
+    };
+
+    // Add optional parameters if provided
+    if (icon) {
+      createParams.icon = {
+        type: "emoji",
+        emoji: icon.emoji as any // Cast to any to resolve type issue with EmojiRequest
+      };
+    }
+    if (cover) createParams.cover = cover;
+
+    // Execute the database creation
+    const response = await notionClient.databases.create(createParams);
+
+    // Return the created database information
+    return JSON.stringify({
+      id: response.id,
+      title: title,
+      properties: Object.keys(response.properties).map(key => ({
+        name: key,
+        type: response.properties[key]?.type || 'unknown'
+      }))
+    }, null, 2);
+  } catch (error: unknown) {
+    handleNotionError(error, `Database creation (parent: ${args.parent_page_id})`);
   }
 }

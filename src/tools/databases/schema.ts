@@ -1,6 +1,85 @@
 // src/tools/databases/schema.ts
 import { z } from "zod";
 
+// Define database property types for database creation
+const titlePropertySchema = z.object({
+  title: z.object({})
+}).describe("Title property (required for all databases)")
+
+const richTextPropertySchema = z.object({
+  rich_text: z.object({})
+}).describe("Rich text property")
+
+const numberPropertySchema = z.object({
+  number: z.object({
+    format: z.enum(["number", "number_with_commas", "percent", "dollar", "euro", "pound", "yen", "ruble", "rupee", "won", "yuan"]).optional()
+  })
+}).describe("Number property with optional formatting")
+
+const selectPropertySchema = z.object({
+  select: z.object({
+    options: z.array(z.object({
+      name: z.string().describe("Option name"),
+      color: z.enum(["default", "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]).optional().describe("Option color")
+    })).optional().describe("Predefined select options")
+  })
+}).describe("Select property with optional predefined options")
+
+const multiSelectPropertySchema = z.object({
+  multi_select: z.object({
+    options: z.array(z.object({
+      name: z.string().describe("Option name"),
+      color: z.enum(["default", "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]).optional().describe("Option color")
+    })).optional().describe("Predefined multi-select options")
+  })
+}).describe("Multi-select property with optional predefined options")
+
+const datePropertySchema = z.object({
+  date: z.object({})
+}).describe("Date property")
+
+const peoplePropertySchema = z.object({
+  people: z.object({})
+}).describe("People property")
+
+const filesPropertySchema = z.object({
+  files: z.object({})
+}).describe("Files property")
+
+const checkboxPropertySchema = z.object({
+  checkbox: z.object({})
+}).describe("Checkbox property")
+
+const urlPropertySchema = z.object({
+  url: z.object({})
+}).describe("URL property")
+
+const emailPropertySchema = z.object({
+  email: z.object({})
+}).describe("Email property")
+
+const phoneNumberPropertySchema = z.object({
+  phone_number: z.object({})
+}).describe("Phone number property")
+
+const databasePropertySchema = z.record(
+  z.string().describe("Property name"),
+  z.union([
+    titlePropertySchema,
+    richTextPropertySchema,
+    numberPropertySchema,
+    selectPropertySchema,
+    multiSelectPropertySchema,
+    datePropertySchema,
+    peoplePropertySchema,
+    filesPropertySchema,
+    checkboxPropertySchema,
+    urlPropertySchema,
+    emailPropertySchema,
+    phoneNumberPropertySchema
+  ]).describe("Property configuration")
+).describe("Database properties configuration")
+
 // Define property filter types for different data types
 const textFilterConditionSchema = z.object({
   equals: z.string().optional(),
@@ -140,5 +219,34 @@ export const queryDatabaseSchema = {
     sorts: z.array(sortSchema).optional().describe("Optional sorting criteria"),
     start_cursor: z.string().optional().describe("Pagination cursor"),
     page_size: z.number().min(1).max(100).optional().describe("Number of results per page (1-100)")
+  }),
+};
+
+// Database creation tool schema
+export const createDatabaseSchema = {
+  name: "notion-create-database",
+  description: "Create a new database as a child of a specified parent page",
+  parameters: z.object({
+    parent_page_id: z.string().describe("ID of the parent page where the database will be created"),
+    title: z.string().describe("Title of the database"),
+    properties: databasePropertySchema.refine(
+      (props) => {
+        // Ensure there's exactly one title property
+        const titleProps = Object.entries(props).filter(([_, value]) => 'title' in value);
+        return titleProps.length === 1;
+      },
+      {
+        message: "Database must have exactly one title property"
+      }
+    ).describe("Properties schema for the database"),
+    icon: z.object({
+      emoji: z.string().describe("Emoji character for the icon")
+    }).optional().describe("Optional emoji icon for the database"),
+    cover: z.object({
+      type: z.enum(["external"]),
+      external: z.object({
+        url: z.string().url()
+      })
+    }).optional().describe("Optional external cover image for the database")
   }),
 };
