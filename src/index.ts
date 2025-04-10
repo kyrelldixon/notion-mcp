@@ -2,6 +2,7 @@ import { FastMCP } from 'fastmcp';
 import { config } from './config';
 import { queryDatabaseSchema, queryDatabaseHandler, createDatabaseSchema, createDatabaseHandler } from './tools/databases';
 import { retrievePageSchema, retrievePageHandler } from './tools/pages';
+import { searchSchema, searchHandler } from './tools/search';
 
 async function main() {
   // Create server instance
@@ -31,6 +32,14 @@ async function main() {
     description: retrievePageSchema.description,
     parameters: retrievePageSchema.parameters,
     execute: retrievePageHandler,
+  });
+
+  // Register search tool
+  server.addTool({
+    name: searchSchema.name,
+    description: searchSchema.description,
+    parameters: searchSchema.parameters,
+    execute: searchHandler,
   });
 
   // Start the server
