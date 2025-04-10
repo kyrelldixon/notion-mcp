@@ -24,9 +24,27 @@
 ## Phase 3: Content Creation and Modification
 - [x] Implement database creation functionality
 - [ ] Implement page creation functionality
+  - [x] Create Zod schema for page creation parameters
+  - [x] Implement createPage handler function
+  - [x] Support different page content types (text, lists, etc.)
+  - [x] Add parent specification (workspace or database)
+  - [x] Implement property setting for new pages
+  - [x] Add error handling for page creation edge cases
+  - [x] Add page creation tool to FastMCP server
+  - [ ] Write tests for page creation functionality
 - [ ] Add page property update functionality
+  - [ ] Create Zod schema for page property update parameters
+  - [ ] Implement updatePageProperties handler function
+  - [ ] Support all property types (text, number, select, etc.)
+  - [ ] Add error handling for property updates
+  - [ ] Add page property update tool to FastMCP server
 - [ ] Add database update functionality
-- [ ] Create test cases for each feature
+  - [ ] Create Zod schema for database update parameters
+  - [ ] Implement updateDatabase handler function
+  - [ ] Support updating database title and description
+  - [ ] Support updating database properties schema
+  - [ ] Add error handling for database updates
+  - [ ] Add database update tool to FastMCP server
 
 ## Phase 4: Block Operations
 - [ ] Implement retrieveBlock functionality
@@ -40,7 +58,6 @@
 - [ ] Add comment operations
 - [ ] Implement markdown conversion utility
 - [ ] Add pagination helper for list operations
-- [ ] Create comprehensive test suite
 
 ## Phase 6: Polish & Deployment
 - [ ] Document all available tools
