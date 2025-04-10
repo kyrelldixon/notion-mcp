@@ -3,9 +3,13 @@
   "module": "src/index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun run index.ts",
+    "dev": "bun --watch index.ts",
+    "inspect": "bunx @modelcontextprotocol/inspector bun src/index.ts"
+  },
   "devDependencies": {
-    "@types/bun": "latest",
-    "vitest": "^3.1.1"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
