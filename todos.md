@@ -46,12 +46,12 @@
   - [x] Add database update tool to FastMCP server
 
 ## Phase 3.5: Documentation Update (Immediate Priority)
-- [ ] Create setup instructions in README
-  - [ ] Document project purpose and capabilities
-  - [ ] List implemented features and tools
-  - [ ] Add installation instructions
-  - [ ] Include example usage for non-technical users
-  - [ ] Document available Notion API integration features
+- [x] Create setup instructions in README
+  - [x] Document project purpose and capabilities
+  - [x] List implemented features and tools
+  - [x] Add installation instructions
+  - [x] Include example usage for non-technical users
+  - [x] Document available Notion API integration features
 
 ## Phase 4: Block Operations & Core Features
 
