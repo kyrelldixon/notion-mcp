@@ -2,6 +2,7 @@
 import { notionClient } from "@/services/notion"
 import { handleNotionError } from "@/utils/error-handling"
 import type { RetrieveBlockChildrenParams } from "./schema"
+import { convertBlockChildrenToMarkdown } from "./utils"
 
 /**
  * Retrieves children blocks of a specified block
@@ -10,13 +11,15 @@ import type { RetrieveBlockChildrenParams } from "./schema"
  */
 export async function retrieveBlockChildrenHandler(params: RetrieveBlockChildrenParams): Promise<string> {
   try {
-    const { block_id, page_size, start_cursor } = params
-
     const response = await notionClient.blocks.children.list({
-      block_id,
-      page_size,
-      start_cursor: start_cursor || undefined,
+      block_id: params.block_id,
+      page_size: params.page_size,
+      start_cursor: params.start_cursor
     })
+
+    if (params.format === "markdown") {
+      return convertBlockChildrenToMarkdown(response)
+    }
 
     return JSON.stringify({
       results: response.results,

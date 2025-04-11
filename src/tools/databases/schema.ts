@@ -1,5 +1,8 @@
 // src/tools/databases/schema.ts
 import { z } from "zod";
+import type { isFullDatabase } from "@notionhq/client";
+import { notionClient } from "@/services/notion";
+import type { Narrowed } from "@/utils/types";
 
 // Define database property types for database creation and updates
 const titlePropertySchema = z.object({
@@ -209,6 +212,10 @@ const sortSchema = z.union([
   })
 ]);
 
+export type QueryDatabaseResponse = Awaited<ReturnType<typeof notionClient.databases.query>>;
+export type GetDatabaseResponse = Awaited<ReturnType<typeof notionClient.databases.retrieve>>;
+export type FullDatabase = Narrowed<typeof isFullDatabase>;
+
 // Main database query tool schema
 export const queryDatabaseSchema = {
   name: "notion-query-database",
@@ -218,9 +225,12 @@ export const queryDatabaseSchema = {
     filter: filterSchema.optional().describe("Optional filter criteria"),
     sorts: z.array(sortSchema).optional().describe("Optional sorting criteria"),
     start_cursor: z.string().optional().describe("Pagination cursor"),
-    page_size: z.number().min(1).max(100).optional().describe("Number of results per page (1-100)")
+    page_size: z.number().min(1).max(100).optional().describe("Number of results per page (1-100)"),
+    format: z.enum(["json", "markdown"]).optional().default("json"),
   }),
 };
+
+export type QueryDatabaseParameters = z.infer<typeof queryDatabaseSchema.parameters>;
 
 // Database creation tool schema
 export const createDatabaseSchema = {
@@ -251,6 +261,8 @@ export const createDatabaseSchema = {
   }),
 };
 
+export type CreateDatabaseParameters = z.infer<typeof createDatabaseSchema.parameters>;
+
 // Database update tool schema
 export const updateDatabaseSchema = {
   name: "notion-update-database",
@@ -258,14 +270,7 @@ export const updateDatabaseSchema = {
   parameters: z.object({
     database_id: z.string().describe("ID of the database to update"),
     title: z.string().optional().describe("New title for the database"),
-    description: z.array(
-      z.object({
-        type: z.literal("text"),
-        text: z.object({
-          content: z.string().describe("Text content for the description")
-        })
-      })
-    ).optional().describe("Rich text array for database description"),
+    description: z.string().optional().describe("Text content for the description"),
     properties: z.record(
       z.string().describe("Property name"),
       z.union([
@@ -289,3 +294,5 @@ export const updateDatabaseSchema = {
     ).optional().describe("Properties to update or remove (set to null to remove)"),
   }),
 };
+
+export type UpdateDatabaseParameters = z.infer<typeof updateDatabaseSchema.parameters>;

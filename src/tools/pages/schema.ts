@@ -1,4 +1,7 @@
 // src/tools/pages/schema.ts
+import type { notionClient } from "@/services/notion"
+import type { Narrowed } from "@/utils/types"
+import type { isFullPage } from "@notionhq/client"
 import { z } from "zod"
 
 // Schema for retrieving a page by its ID
@@ -8,13 +11,14 @@ export const retrievePageSchema = {
   parameters: z.object({
     page_id: z.string().describe("ID of the page to retrieve"),
     // Optional filter to include or exclude specific properties
-    filter_properties: z.object({
-      // Either include or exclude specific properties
-      include: z.array(z.string()).optional().describe("List of property names to include"),
-      exclude: z.array(z.string()).optional().describe("List of property names to exclude"),
-    }).optional().describe("A set of page property value IDs to include or exclude associated with the page. Use this param to limit the response to a specific page property value or values. To retrieve multiple properties, specify each page property ID."),
+    filter_properties: z.array(z.string()).optional().describe("A set of page property value IDs to include or exclude associated with the page. Use this param to limit the response to a specific page property value or values. To retrieve multiple properties, specify each page property ID."),
+    format: z.enum(["json", "markdown"]).optional().default("json").describe("Format of the response. Default is 'json'."),
   }),
 }
+
+export type GetPageResponse = Awaited<ReturnType<typeof notionClient.pages.retrieve>>
+export type FullPageObject = Narrowed<typeof isFullPage>
+export type PageProperty = FullPageObject["properties"][string]
 
 // Rich text object schema for block content
 export const richTextObject = z.object({
