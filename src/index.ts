@@ -1,7 +1,7 @@
 import { FastMCP } from 'fastmcp';
 import { config } from './config';
 import { queryDatabaseSchema, queryDatabaseHandler, createDatabaseSchema, createDatabaseHandler } from './tools/databases';
-import { retrievePageSchema, retrievePageHandler, createPageSchema, createPageHandler } from './tools/pages';
+import { retrievePageSchema, retrievePageHandler, createPageSchema, createPageHandler, createDatabaseItemSchema, createDatabaseItemHandler } from './tools/pages';
 import { searchSchema, searchHandler } from './tools/search';
 
 async function main() {
@@ -39,6 +39,13 @@ async function main() {
     description: createPageSchema.description,
     parameters: createPageSchema.parameters,
     execute: createPageHandler,
+  });
+
+  server.addTool({
+    name: createDatabaseItemSchema.name,
+    description: createDatabaseItemSchema.description,
+    parameters: createDatabaseItemSchema.parameters,
+    execute: createDatabaseItemHandler,
   });
 
   // Register search tool
