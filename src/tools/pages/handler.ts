@@ -2,7 +2,7 @@
 import type { GetPageParameters, CreatePageParameters } from "@notionhq/client/build/src/api-endpoints"
 import { notionClient } from "@/services/notion"
 import { handleNotionError } from "@/utils/error-handling"
-import { type RetrievePageParams, type CreatePageParams, type CreateDatabaseItemParams } from "./schema"
+import type { RetrievePageParams, CreatePageParams, CreateDatabaseItemParams } from "./schema"
 import { UserError } from "fastmcp"
 
 /**
@@ -65,12 +65,22 @@ export async function retrievePageHandler(args: RetrievePageParams): Promise<str
  */
 export async function createPageHandler(args: CreatePageParams): Promise<string> {
   try {
-    const { parent, properties, children } = args
+    const { page_id, title, children } = args
     
     // Build the create page parameters with proper type casting for the Notion API
     const createParams: CreatePageParameters = {
-      parent,
-      properties
+      parent: {
+        page_id
+      },
+      properties: {
+        title: {
+          title: [{
+            text: {
+              content: title
+            }
+          }]
+        }
+      }
     }
 
     // Add children blocks if provided
@@ -106,12 +116,12 @@ export async function createPageHandler(args: CreatePageParams): Promise<string>
  */
 export async function createDatabaseItemHandler(args: CreateDatabaseItemParams): Promise<string> {
   try {
-    const { parent, properties, children } = args
+    const { database_id, properties, children } = args
     
     // Build the create page parameters
     const createParams = {
       parent: {
-        database_id: parent.database_id
+        database_id
       },
       properties: {} as any,
       children: children as any

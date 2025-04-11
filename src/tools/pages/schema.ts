@@ -451,22 +451,8 @@ export const createPageSchema = {
   description: "Create a new standalone page in Notion with a page parent",
   parameters: z.object({
     // Parent page information
-    parent: z.object({
-      page_id: z.string().describe("ID of the parent page")
-    }).describe("An object containing the parent page ID where this page will be created"),
-
-    // For pages with page parents, only title is valid
-    properties: z.object({
-      title: z.object({
-        type: z.literal("title"),
-        title: z.array(z.object({
-          text: z.object({
-            content: z.string().describe("The text content of the title")
-          })
-        }))
-      }).describe("The title of the page")
-    }).describe("The page properties. For pages with page parents, only the title property is valid."),
-
+    page_id: z.string().describe("ID of the parent page"),
+    title: z.string().describe("The title of the page"),
     // Page children blocks - optional
     children: z.array(blockContent).optional().describe("The content to be rendered on the new page, represented as an array of block objects."),
   }),
@@ -478,9 +464,7 @@ export const createDatabaseItemSchema = {
   description: "Create a new item in a Notion database",
   parameters: z.object({
     // Parent database information
-    parent: z.object({
-      database_id: z.string().describe("ID of the database to create the item in")
-    }).describe("An object containing the database ID where this item will be created"),
+    database_id: z.string().describe("ID of the database to create the item in"),
     
     // Database item properties - must match the database schema
     properties: propertyValueSchema.describe("The values of the database item's properties. The schema must match the parent database's properties."),
