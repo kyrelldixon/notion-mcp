@@ -73,11 +73,11 @@
   - [x] Add error handling for block children retrieval
   - [x] Add block children retrieval tool to FastMCP server
 
-### Phase 4.2: Improved Data Readability
-- [ ] Implement markdown conversion utility
-  - [ ] Create utilities to convert block content to markdown
-  - [ ] Support conversion of all common block types
-  - [ ] Integrate with block retrieval methods
+### Phase 4.2: Improved Data Readability (Completed)
+- [x] Implement markdown conversion utility
+  - [x] Create utilities to convert block content to markdown
+  - [x] Support conversion of all common block types
+  - [x] Integrate with block retrieval methods
   - [ ] Add tests for markdown conversion
 
 ### Phase 4.3: Enhanced Data Access
