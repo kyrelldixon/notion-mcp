@@ -1,7 +1,7 @@
 // src/tools/databases/schema.ts
 import { z } from "zod";
 
-// Define database property types for database creation
+// Define database property types for database creation and updates
 const titlePropertySchema = z.object({
   title: z.object({})
 }).describe("Title property (required for all databases)")
@@ -248,5 +248,44 @@ export const createDatabaseSchema = {
         url: z.string().url()
       })
     }).optional().describe("Optional external cover image for the database")
+  }),
+};
+
+// Database update tool schema
+export const updateDatabaseSchema = {
+  name: "notion-update-database",
+  description: "Update an existing database's title, description, or properties",
+  parameters: z.object({
+    database_id: z.string().describe("ID of the database to update"),
+    title: z.string().optional().describe("New title for the database"),
+    description: z.array(
+      z.object({
+        type: z.literal("text"),
+        text: z.object({
+          content: z.string().describe("Text content for the description")
+        })
+      })
+    ).optional().describe("Rich text array for database description"),
+    properties: z.record(
+      z.string().describe("Property name"),
+      z.union([
+        // To remove a property, set it to null
+        z.null(),
+        // Or provide a property configuration
+        z.union([
+          titlePropertySchema,
+          richTextPropertySchema,
+          numberPropertySchema,
+          datePropertySchema,
+          peoplePropertySchema,
+          filesPropertySchema,
+          checkboxPropertySchema,
+          urlPropertySchema,
+          emailPropertySchema,
+          phoneNumberPropertySchema,
+          multiSelectPropertySchema
+        ])
+      ])
+    ).optional().describe("Properties to update or remove (set to null to remove)"),
   }),
 };

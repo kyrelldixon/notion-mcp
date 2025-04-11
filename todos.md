@@ -37,13 +37,13 @@
   - [x] Support all property types (text, number, select, etc.)
   - [x] Add error handling for property updates
   - [x] Add page property update tool to FastMCP server
-- [ ] Add database update functionality
-  - [ ] Create Zod schema for database update parameters
-  - [ ] Implement updateDatabase handler function
-  - [ ] Support updating database title and description
-  - [ ] Support updating database properties schema
-  - [ ] Add error handling for database updates
-  - [ ] Add database update tool to FastMCP server
+- [x] Add database update functionality
+  - [x] Create Zod schema for database update parameters
+  - [x] Implement updateDatabase handler function
+  - [x] Support updating database title and description
+  - [x] Support updating database properties schema
+  - [x] Add error handling for database updates
+  - [x] Add database update tool to FastMCP server
 
 ## Phase 4: Block Operations
 - [ ] Implement retrieveBlock functionality

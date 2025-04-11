@@ -1,9 +1,9 @@
 // src/tools/databases/handler.ts
 import { z } from "zod";
-import type { QueryDatabaseParameters, CreateDatabaseParameters } from "@notionhq/client/build/src/api-endpoints";
+import type { QueryDatabaseParameters, CreateDatabaseParameters, UpdateDatabaseParameters } from "@notionhq/client/build/src/api-endpoints";
 import { notionClient } from "@/services/notion";
 import { handleNotionError } from "@/utils/error-handling";
-import { queryDatabaseSchema, createDatabaseSchema } from "./schema";
+import { queryDatabaseSchema, createDatabaseSchema, updateDatabaseSchema } from "./schema";
 
 export async function queryDatabaseHandler(
   args: z.infer<typeof queryDatabaseSchema.parameters>
@@ -88,5 +88,79 @@ export async function createDatabaseHandler(
     }, null, 2);
   } catch (error: unknown) {
     handleNotionError(error, `Database creation (parent: ${args.parent_page_id})`);
+  }
+}
+
+/**
+ * Updates an existing database's title, description, or properties
+ * 
+ * @param args - Parameters for database update
+ * @returns JSON string with the updated database information
+ */
+export async function updateDatabaseHandler(
+  args: z.infer<typeof updateDatabaseSchema.parameters>
+) {
+  try {
+    const { database_id, title, description, properties } = args;
+
+    // Build the update database parameters
+    const updateParams: UpdateDatabaseParameters = {
+      database_id
+    };
+
+    // Add optional parameters if provided
+    if (title) {
+      updateParams.title = [
+        {
+          type: "text",
+          text: {
+            content: title
+          }
+        }
+      ];
+    }
+    
+    if (description) {
+      updateParams.description = description;
+    }
+    
+    if (properties) {
+      updateParams.properties = properties;
+    }
+
+    // Execute the database update
+    const response = await notionClient.databases.update(updateParams);
+
+    // Return the updated database information
+    // Format the response for better readability
+    // Use a properly typed object with optional properties
+    type FormattedResponse = {
+      id: string;
+      properties: { name: string; type: string }[];
+      title?: string;
+      description?: string;
+    };
+    
+    const formattedResponse: FormattedResponse = {
+      id: response.id,
+      properties: Object.keys(response.properties).map(key => ({
+        name: key,
+        type: response.properties[key]?.type || 'unknown'
+      }))
+    };
+    
+    // Add title if available in the response
+    if ('title' in response && Array.isArray(response.title)) {
+      formattedResponse.title = response.title.map((t: any) => t.plain_text).join('');
+    }
+    
+    // Add description if available in the response
+    if ('description' in response && Array.isArray(response.description)) {
+      formattedResponse.description = response.description.map((d: any) => d.plain_text).join('');
+    }
+    
+    return JSON.stringify(formattedResponse, null, 2);
+  } catch (error: unknown) {
+    handleNotionError(error, `Database update (id: ${args.database_id})`);
   }
 }
