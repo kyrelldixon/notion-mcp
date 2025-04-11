@@ -3,6 +3,7 @@ import { config } from './config';
 import { queryDatabaseSchema, queryDatabaseHandler, createDatabaseSchema, createDatabaseHandler, updateDatabaseSchema, updateDatabaseHandler } from './tools/databases';
 import { retrievePageSchema, retrievePageHandler, createPageSchema, createPageHandler, createDatabaseItemSchema, createDatabaseItemHandler, updatePagePropertiesSchema, updatePagePropertiesHandler } from './tools/pages';
 import { searchSchema, searchHandler } from './tools/search';
+import { retrieveBlockChildrenSchema, retrieveBlockChildrenHandler } from './tools/blocks';
 
 async function main() {
   // Create server instance
@@ -68,6 +69,14 @@ async function main() {
     description: searchSchema.description,
     parameters: searchSchema.parameters,
     execute: searchHandler,
+  });
+
+  // Register block tools
+  server.addTool({
+    name: retrieveBlockChildrenSchema.name,
+    description: retrieveBlockChildrenSchema.description,
+    parameters: retrieveBlockChildrenSchema.parameters,
+    execute: retrieveBlockChildrenHandler,
   });
 
   // Start the server

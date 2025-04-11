@@ -17,7 +17,7 @@ export const retrievePageSchema = {
 }
 
 // Rich text object schema for block content
-const richTextObject = z.object({
+export const richTextObject = z.object({
   type: z.enum(["text", "mention", "equation"]).describe("Type of rich text object"),
   text: z.object({
     content: z.string().describe("Text content"),
@@ -49,7 +49,7 @@ const richTextObject = z.object({
 })
 
 // File object schema for file, image, video, etc.
-const fileObject = z.object({
+export const fileObject = z.object({
   type: z.enum(["external", "file"]),
   external: z.object({
     url: z.string().url()

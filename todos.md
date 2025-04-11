@@ -56,22 +56,22 @@
 ## Phase 4: Block Operations & Core Features
 
 ### Phase 4.1: Block Children Retrieval (Highest Priority)
-- [ ] Create common block type schemas
-  - [ ] Define base block schema structure
-  - [ ] Implement paragraph block schema
-  - [ ] Implement heading block schemas (h1, h2, h3)
-  - [ ] Implement list block schemas (bulleted, numbered, to-do)
-  - [ ] Implement code block schema
-  - [ ] Implement quote block schema
-  - [ ] Implement callout block schema
-  - [ ] Implement divider block schema
-  - [ ] Implement image block schema
-  - [ ] Implement other block type schemas as needed
-- [ ] Implement retrieveBlockChildren functionality
-  - [ ] Create Zod schema for block children retrieval parameters
-  - [ ] Implement retrieveBlockChildren handler function
-  - [ ] Add error handling for block children retrieval
-  - [ ] Add block children retrieval tool to FastMCP server
+- [x] Create common block type schemas
+  - [x] Define base block schema structure
+  - [x] Implement paragraph block schema
+  - [x] Implement heading block schemas (h1, h2, h3)
+  - [x] Implement list block schemas (bulleted, numbered, to-do)
+  - [x] Implement code block schema
+  - [x] Implement quote block schema
+  - [x] Implement callout block schema
+  - [x] Implement divider block schema
+  - [x] Implement image block schema
+  - [x] Implement other block type schemas as needed
+- [x] Implement retrieveBlockChildren functionality
+  - [x] Create Zod schema for block children retrieval parameters
+  - [x] Implement retrieveBlockChildren handler function
+  - [x] Add error handling for block children retrieval
+  - [x] Add block children retrieval tool to FastMCP server
 
 ### Phase 4.2: Improved Data Readability
 - [ ] Implement markdown conversion utility
