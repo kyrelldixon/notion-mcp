@@ -12,7 +12,7 @@ export const retrieveBlockChildrenSchema = {
   name: "notion-retrieve-block-children",
   description: "Retrieve all children blocks of a block",
   parameters: z.object({
-    format: z.enum(["json", "markdown"]).optional().default("json"),
+    format: z.enum(["json", "markdown"]).optional().default("json").describe("Format of the response. Default is 'json'."),
     block_id: z.string().describe("ID of the block to retrieve children for. This could also be a page ID"),
     page_size: z.number().min(1).max(100).optional().describe("Number of blocks to return per page (default: 100, max: 100)"),
     start_cursor: z.string().optional().describe("Cursor to start from for pagination")

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "bun run index.ts",
     "dev": "bun --watch index.ts",
-    "inspect": "bunx @modelcontextprotocol/inspector bun src/index.ts"
+    "inspect": "bunx @modelcontextprotocol/inspector bun src/index.ts",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest"
