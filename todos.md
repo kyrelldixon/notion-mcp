@@ -31,12 +31,12 @@
   - [x] Implement property setting for new pages
   - [x] Add error handling for page creation edge cases
   - [x] Add page creation tool to FastMCP server
-- [ ] Add page property update functionality
-  - [ ] Create Zod schema for page property update parameters
-  - [ ] Implement updatePageProperties handler function
-  - [ ] Support all property types (text, number, select, etc.)
-  - [ ] Add error handling for property updates
-  - [ ] Add page property update tool to FastMCP server
+- [x] Add page property update functionality
+  - [x] Create Zod schema for page property update parameters
+  - [x] Implement updatePageProperties handler function
+  - [x] Support all property types (text, number, select, etc.)
+  - [x] Add error handling for property updates
+  - [x] Add page property update tool to FastMCP server
 - [ ] Add database update functionality
   - [ ] Create Zod schema for database update parameters
   - [ ] Implement updateDatabase handler function
@@ -53,10 +53,9 @@
 - [ ] Implement deleteBlock functionality
 
 ## Phase 5: Advanced Features
-- [ ] Add user operations (listing, retrieval)
-- [ ] Add comment operations
 - [ ] Implement markdown conversion utility
 - [ ] Add pagination helper for list operations
+- [ ] Polish code and final refactors
 
 ## Phase 6: Polish & Deployment
 - [ ] Document all available tools

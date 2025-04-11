@@ -474,7 +474,18 @@ export const createDatabaseItemSchema = {
   }),
 }
 
+// Schema for updating page properties
+export const updatePagePropertiesSchema = {
+  name: "notion-update-page-properties",
+  description: "Update properties of an existing Notion page",
+  parameters: z.object({
+    page_id: z.string().describe("ID of the page to update"),
+    properties: propertyValueSchema.describe("The properties to update. Only specified properties will be updated.")
+  }),
+}
+
 // Type inference for the parameters
 export type RetrievePageParams = z.infer<typeof retrievePageSchema.parameters>
 export type CreatePageParams = z.infer<typeof createPageSchema.parameters>
 export type CreateDatabaseItemParams = z.infer<typeof createDatabaseItemSchema.parameters>
+export type UpdatePagePropertiesParams = z.infer<typeof updatePagePropertiesSchema.parameters>
