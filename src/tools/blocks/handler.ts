@@ -1,7 +1,8 @@
 // src/tools/blocks/handler.ts
+import type { BlockObjectRequest } from "@notionhq/client/build/src/api-endpoints"
 import { notionClient } from "@/services/notion"
 import { handleNotionError } from "@/utils/error-handling"
-import type { RetrieveBlockChildrenParams } from "./schema"
+import type { RetrieveBlockChildrenParams, AppendBlockChildrenParams } from "./schema"
 import { convertBlockChildrenToMarkdown } from "./utils"
 
 /**
@@ -28,5 +29,26 @@ export async function retrieveBlockChildrenHandler(params: RetrieveBlockChildren
     })
   } catch (error: unknown) {
     handleNotionError(error, `Block children retrieval (${params.block_id})`)
+  }
+}
+
+/**
+ * Appends new children blocks to a specified parent block
+ * @param params Parameters for appending block children
+ * @returns JSON string containing the newly created children blocks
+ */
+export async function appendBlockChildrenHandler(params: AppendBlockChildrenParams): Promise<string> {
+  try {
+    const response = await notionClient.blocks.children.append({
+      block_id: params.block_id,
+      children: params.children as BlockObjectRequest[],
+      after: params.after
+    })
+
+    return JSON.stringify({
+      results: response.results,
+    })
+  } catch (error: unknown) {
+    handleNotionError(error, `Block children append (${params.block_id})`)
   }
 }
